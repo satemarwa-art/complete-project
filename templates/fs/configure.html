@@ -1,0 +1,90 @@
+{% extends 'fs/base.html' %}
+{% block title %}إعداد وتشغيل · {{ dataset.name }}{% endblock %}
+{% block content %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 class="fw-bold mb-0">إعداد وتشغيل الخوارزمية</h4>
+            <span class="badge bg-secondary">{{ dataset.name }}</span>
+          </div>
+          <div class="mb-3 small text-muted">الأعمدة: {{ dataset.columns|join:', ' }}</div>
+
+          <form id="run-form" method="post" class="row g-3">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="col-md-6">
+              <label class="form-label">العمود الهدف</label>
+              {{ form.target_column }}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">نوع المهمة</label>
+              {{ form.task }}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">المقدر</label>
+              {{ form.estimator }}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">عدد الطيات (CV)</label>
+              {{ form.cv_folds }}
+            </div>
+
+            <div class="col-12"><hr class="my-2"></div>
+
+            <div class="col-md-2">
+              <label class="form-label">حجم المجتمع</label>
+              {{ form.pop_size }}
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">عدد الأجيال</label>
+              {{ form.generations }}
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">نسبة العبور</label>
+              {{ form.crossover_rate }}
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">نسبة الطفرة</label>
+              {{ form.mutation_rate }}
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">النخبوية</label>
+              {{ form.elitism }}
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">عقوبة الميزات</label>
+              {{ form.penalty }}
+            </div>
+
+            <div class="col-12 mt-2">
+              <div class="form-check">
+                {{ form.quick_mode }}
+                <label class="form-check-label">الوضع السريع: CV بـ 3 وتقليل السكان/الأجيال لتجربة أسرع.</label>
+              </div>
+            </div>
+
+            <div class="col-12 mt-2">
+              <button class="btn btn-success" type="submit" id="run-btn">
+                <span class="default-text"><i class="bi bi-play-fill"></i> تشغيل الخوارزمية</span>
+                <span class="loading d-none"><span class="spinner-border spinner-border-sm"></span> جارٍ التشغيل...</span>
+              </button>
+              <a href="/" class="btn btn-link">العودة للرئيسية</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body p-4">
+          <h6 class="fw-bold mb-2">ما الذي يحدث؟</h6>
+          <p class="text-muted small mb-0">سيجري النظام اختيار الميزات بالوراثية، مع مقارنة خطوط الأساس مثل اختيار الأفضل بالترتيب أو L1. النتيجة تشمل أفضل درجة وعدد الميزات المختارة.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

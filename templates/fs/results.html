@@ -1,0 +1,76 @@
+{% extends 'fs/base.html' %}
+{% block title %}النتائج · تشغيل #{{ run.id }}{% endblock %}
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold mb-0">نتائج التشغيل #{{ run.id }}</h4>
+    <a class="btn btn-outline-primary" href="/">
+      <i class="bi bi-arrow-right"></i>
+      العودة للرئيسية
+    </a>
+  </div>
+
+  <div class="mb-2">
+    <span class="badge bg-info-subtle text-info-emphasis border">{{ run.get_task_display }}</span>
+    <span class="badge bg-secondary-subtle text-secondary-emphasis border">{{ run.get_estimator_display }}</span>
+    <span class="badge bg-dark">CV: {{ run.cv_folds }}</span>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-body p-4">
+          <h6 class="fw-bold mb-3">نتائج الخوارزمية الجينية</h6>
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <div class="stat-tile">
+                <div class="stat-label">أفضل درجة</div>
+                <div class="stat-value">{{ metrics.ga.best_score|default:run.best_score }}</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-tile">
+                <div class="stat-label">عدد الميزات المختارة</div>
+                <div class="stat-value">{{ metrics.ga.selected_count|default:selected_features|length }}</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="fw-semibold mb-2">الميزات المختارة</div>
+            <div class="d-flex flex-wrap gap-2">
+              {% for f in selected_features %}
+                <span class="badge rounded-pill text-bg-primary">{{ f }}</span>
+              {% empty %}
+                <span class="text-muted">لا توجد ميزات مختارة.</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-body p-4">
+          <h6 class="fw-bold mb-3">خطوط الأساس للمقارنة</h6>
+          {% if baselines %}
+            <ul class="list-group list-group-flush">
+              {% for key, val in baselines.items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="fw-semibold">{{ key }}</div>
+                    {% if val.selected_features %}
+                      <div class="small text-muted">عدد الميزات: {{ val.selected_features|length }}</div>
+                    {% endif %}
+                  </div>
+                  <span class="badge text-bg-success">{{ val.score|default:val }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted mb-0">لا توجد نتائج خطوط أساس.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

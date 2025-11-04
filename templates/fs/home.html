@@ -1,0 +1,61 @@
+{% extends 'fs/base.html' %}
+{% block title %}الصفحة الرئيسية · اختيار الميزات{% endblock %}
+{% block content %}
+  <!-- Hero section -->
+  <section class="app-hero mb-4 rounded-4 p-4 p-md-5">
+    <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+      <div>
+        <h1 class="display-6 fw-bold mb-2">اختيار الميزات بالخوارزمية الجينية</h1>
+        <p class="mb-0 opacity-75">ارفع بياناتك، حدّد العمود الهدف، وشغّل خوارزمية وراثية لاختيار أفضل مجموعة ميزات مع خطوط أساس للمقارنة.</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="/datasets/upload/" class="btn btn-primary btn-lg">
+          <i class="bi bi-upload"></i>
+          رفع قاعدة بيانات
+        </a>
+        {% if datasets %}
+          <a href="#datasets" class="btn btn-outline-light btn-lg">
+            <i class="bi bi-list-ul"></i>
+            آخر القواعد
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent datasets -->
+  <section id="datasets" class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h5 class="mb-0">آخر قواعد البيانات</h5>
+      <a href="/datasets/upload/" class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-plus-lg"></i>
+        جديد
+      </a>
+    </div>
+    {% if datasets %}
+      <div class="list-group shadow-sm">
+        {% for ds in datasets %}
+          <a href="/datasets/{{ ds.id }}/configure/" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">
+              <i class="bi bi-database-fill me-1 text-primary"></i>
+              {{ ds.name }}
+            </span>
+            <span class="text-muted small">{{ ds.uploaded_at|date:'Y-m-d H:i' }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="card shadow-sm">
+        <div class="card-body text-center py-5">
+          <i class="bi bi-inbox display-5 text-muted d-block mb-2"></i>
+          <p class="mb-3">لا توجد بيانات بعد. ارفع ملف CSV لبدء العمل.</p>
+          <a href="/datasets/upload/" class="btn btn-primary">
+            <i class="bi bi-upload"></i>
+            رفع CSV
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}
+
